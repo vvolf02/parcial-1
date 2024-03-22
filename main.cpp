@@ -5,12 +5,13 @@ void rotar90(int matriz[5][5]);
 void rotar180(int matriz[5][5]);
 void rotar270(int matriz[5][5]);
 void punto14();
+void crearmatriz(int nums[], int n);
 int main()
 {
     int n;
     cout<<"ingrese cuantas matrices desea implementar en la cerradura"<<endl;
     cin>>n;
-    int cant[n];
+    int cant[n], matriz[n];
     for (int j=0; j<n; j++)
     {
         int num=2;
@@ -20,6 +21,31 @@ int main()
             cin>>num;
         }
         cant[j]=num;
+    }
+    int* matrices[n];
+
+}
+
+void crearmatriz(int nums[], int n)
+{
+    int num,num1,val=1;
+    num=nums[n];
+    num1=num/2;
+    int matriz[num][num];
+    for(int j=0; j<num; j++)
+    {
+        for(int i=0; i<num; i++)
+        {
+            if(j==num1 && i==num1)
+            {
+                matriz[j][i]=0;
+            }
+            if(j!=num1 || i!=num1)
+            {
+                matriz[j][i]=val;
+                val+=1;
+            }
+        }
     }
 }
 
