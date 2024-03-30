@@ -1,38 +1,54 @@
 #include <iostream>
 
 using namespace std;
-void rotar90(int matriz[n][n]);
-void rotar180(int matriz[n][n]);
-void rotar270(int matriz[n][n]);
-void punto14();
+void rotar90(int **matriz, int n);
 int** crearmatriz(int n);
 int main()
 {
-    int n;
-    cout<<"ingrese cuantas matrices desea implementar en la cerradura"<<endl;
+    int n, val=2, num1;
+    cout<<"cuantas matrices desea que contenga la cerradura?"<<endl;
     cin>>n;
-    int cant[n], matriz[n];
-    for (int j=0; j<n; j++)
+    int reglas[n+1];
+    cout<<"a continuacion, ingrese las reglas para la cerradura"<<endl;
+    cout<<"ingrese la fila de la celda de referencia"<<endl;
+    cin>>reglas[0];
+    num1=reglas[0];
+    cout<<"ingrese la columna de la celda de referencia"<<endl;
+    cin>>reglas[1];
+    if(reglas[1]>reglas[0])
     {
-        int num=2;
-        while(num%2!=1)
+        num1=reglas[1];
+    }
+    if(num1%2==0)
+    {
+        num1+=1;
+    }
+    int p=1;
+    for(int i=2; i<=n; i++)
+    {
+        if(i<=n)
         {
-            cout<<"ingrese el tamano del que desea la matriz numero "<<j+1<<": ";
-            cin>>num;
+            val=2;
         }
-        cant[j]=num;
+        while (val<-1 || val>1)
+        {
+            cout<<"ingrese la condicion numero "<<p<<" (-1 para >, 0 para = y 1 para <)"<<endl;
+            cin>>val;
+        }
+        reglas[i]=val;
+        p+=1;
     }
     int*** matrices=new int**[n];
     for(int j=0; j<n; j++)
     {
-        matrices[j]=crearmatriz(cant, j);
+        matrices[j]=crearmatriz(num1);
     }
 }
 
 int** crearmatriz(int n)
 {
     int num,num1,val=1;
-    num=n
+    num=n;
     num1=num/2;
     int **matriz=new int*[num];
     for(int i=0; i<num; i++)
@@ -57,10 +73,9 @@ int** crearmatriz(int n)
     return matriz;
 }
 
-//funciones traidas de la practica de laboratorio 2
-void rotar90(int matriz[n][n])
+void rotar90(int** matriz, int n)
 {
-    int matrot[n][n];
+    int** matrot=crearmatriz(n);
     for (int i=0; i<n; i++)
     {
         for (int j=0; j<n; j++)
@@ -68,53 +83,16 @@ void rotar90(int matriz[n][n])
             matrot[j][n-1-i]=matriz[i][j];
         }
     }
-    cout<<"Matriz rotada 90 grados:"<<endl;
-}
-
-void rotar180(int matriz[n][n])
-{
-    int matrot[n][n];
     for (int i=0; i<n; i++)
     {
         for (int j=0; j<n; j++)
         {
-            matrot[n-1-i][n-1-j]=matriz[i][j];
+            matriz[i][j]=matrot[i][j];
         }
     }
-
-    cout<<"Matriz rotada 180 grados:"<<endl;
-}
-
-void rotar270(int matriz[n][n])
-{
-    int matrot[n][n];
     for (int i=0; i<n; i++)
     {
-        for (int j=0; j<n; j++)
-        {
-            matrot[n-1-j][i]=matriz[i][j];
-        }
+        delete[] matrot[i];
     }
-
-    cout<<"Matriz rotada 270 grados:"<<endl;
-}
-
-void punto14()
-{
-    int matriz[n][n];
-    int cont=1;
-    for (int i=0; i<5; i++)
-    {
-        for (int j = 0; j<5; j++)
-        {
-            matriz[i][j]=cont++;
-        }
-    }
-    cout<<"Matriz original:"<<endl;
-
-    rotar90(matriz);
-
-    rotar180(matriz);
-
-    rotar270(matriz);
+    delete[] matrot;
 }
