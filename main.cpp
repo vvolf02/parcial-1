@@ -49,51 +49,54 @@ int main()
         reglas[i]=val;
         p+=1;
     }
+
     int*** matrices=new int**[n];
     for(int j=0; j<n; j++)
     {
         matrices[j]=crearmatriz(num1);
     }
+    casos(reglas,matrices,0,num1,reglas[0]);
+    val=matrices[0][reglas[0]-1][reglas[1]-1];
 
-    casos(reglas,matrices,0,num1,0);
-
-    val=matrices[0][reglas[0]][reglas[1]];
     int val2=0;
     int fila=reglas[0];
     int columna=reglas[1];
 
-    for(int i=2; i<=n+1;i++ ) //n=son las matrices en total
+    for(int i=2; i<n+1;i++ ) //n=son las matrices en total
     {
+
         int cond=reglas[i]; //Las condiciones 1,-1 ó 0 que aparecenel la relga
 
         int contador=0, x=0, tamaño=0;
         bool verificador=true, verificador2=true;
-        casos(reglas,matrices,i-1,num1-tamaño,fila+x);
 
-        while(verificador = true)//&& verificador2=true)
+        while(verificador == true)// && verificador2==true)
         {
-            if (cond=0)
+            if (cond==0)
             {
                 matrices[i-1]=matrices[i-2];  //Copiar y pegar, la opción felíz
                 verificador=false;
             }
 
-            val2=matrices[i-1][fila+x][columna+x]; // X:disminuye
-
-            if(cond=1 && contador<3)
+            if(cond==1 && contador<3)
             {
+                cout<<matrices[i-1][fila-1][columna-1]<<endl;
+                val2=matrices[i-1][fila-1+x][columna-1+x]; // X:disminuye
+
+                if(val<=val2)
+                {
+                    rotar90(matrices[i-1], num1+tamaño);
+                    rotar90(matrices[i-1], num1+tamaño);
+                    rotar90(matrices[i-1], num1+tamaño);
+                    contador++;
+                }
                 if(val>val2)
                 {
                     val=val2;
                     verificador=false;
                 }
 
-                if(val<val2)
-                {
-                    rotar90(matrices[i-1], num1+tamaño);
-                    contador++;
-                }
-                if(contador=3)
+                if(contador==3)
                 {
                     matrices[i-1]=crearmatriz(num1-2);
                     x= x-1;
@@ -110,20 +113,24 @@ int main()
                 }
             }
 
-            if(cond=-1 && contador<3)
+            if(cond==-1 && contador<3)
             {
+                val2=matrices[i-1][fila-1+x][columna-1+x]; // X:aumenta
+
+                if(val>=val2)
+                {
+                    rotar90(matrices[i-1], num1+tamaño);
+                    rotar90(matrices[i-1], num1+tamaño);
+                    rotar90(matrices[i-1], num1+tamaño);
+                    contador++;
+                }
                 if(val<val2)
                 {
                     val=val2;
                     verificador=false;
                 }
 
-                if(val>val2)
-                {
-                    rotar90(matrices[i-1], num1+tamaño);
-                    contador++;
-                }
-                if(contador=3)
+                if(contador==3)
                 {
                     matrices[i-1]=crearmatriz(num1+2);
                     x= x+1;
@@ -137,6 +144,7 @@ int main()
                     fila=fila+x;
                     columna=columna+x;
                     num1=num1+tamaño;
+                    contador=0;
                 }
             }
 
@@ -145,14 +153,14 @@ int main()
         if (verificador2==false)
         {
             i=n+1;
-            "La regla no tiene solución";
+            cout<<"La regla no tiene solución"<<endl;
         }
 
     }
-    //Acá iria la comentacion de que si cumplio todo
-
-
-
+    if(verificador2==true)
+    {
+        //Acá iria la comentacion de que si cumplio todo
+    }
 
 }
 
@@ -210,7 +218,7 @@ void rotar90(int** matriz, int n)
 
 void casos(int* reglas, int*** matrices, int n, int num1,int fila)
 {
-    if(reglas[n+1]=1)
+    if(reglas[n+1]==1)
     {
         if(fila<=num1/2)
         {
@@ -218,7 +226,7 @@ void casos(int* reglas, int*** matrices, int n, int num1,int fila)
             rotar90(matrices[n], num1);
         }
     }
-    if(reglas[n+1]=-1)
+    if(reglas[n+1]==-1)
     {
         if(fila>(num1/2)+1)
         {
@@ -226,9 +234,4 @@ void casos(int* reglas, int*** matrices, int n, int num1,int fila)
             rotar90(matrices[n], num1);
         }
     }
-}
-
-
-void ubicar(int** matriz) {
-    cout << "Primera posición de la matriz: " << matriz[0][0] <<endl;
 }
