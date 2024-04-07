@@ -1,11 +1,3 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-  GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby,
-  C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, COBOL, HTML, CSS, JS
-  Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <iostream>
 
 using namespace std;
@@ -55,32 +47,36 @@ int main()
     {
         matrices[j]=crearmatriz(num1);
     }
+    int rota=0;
     casos(reglas,matrices,0,num1,reglas[0]);
+    if(  (reglas[2]==-1 && reglas[0]>(num1/2)+1) || (reglas[2]==1 && reglas[0]<=num1/2))
+        rota=2;
+        
     val=matrices[0][reglas[0]-1][reglas[1]-1];
 
     int val2=0;
     int fila=reglas[0];
     int columna=reglas[1];
-
+    cout<<"la matriz 1 de tamano "<<num1<<" roto "<<rota<<" veces"<<endl;
     for(int i=2; i<n+1;i++ ) //n=son las matrices en total
     {
-
         int cond=reglas[i]; //Las condiciones 1,-1 ó 0 que aparecenel la relga
 
         int contador=0, x=0, tamaño=0;
         bool verificador=true, verificador2=true;
 
-        while(verificador == true)// && verificador2==true)
+        while(verificador == true && verificador2==true)
         {
             if (cond==0)
             {
                 matrices[i-1]=matrices[i-2];  //Copiar y pegar, la opción felíz
+                cout<<"la matriz "<<i<<" de tamano "<<num1<< " roto "<<rota<<" veces"<<endl;
                 verificador=false;
             }
 
-            if(cond==1 && contador<3)
+            if(cond==1 && contador<4)
             {
-                cout<<matrices[i-1][fila-1][columna-1]<<endl;
+                //cout<<matrices[i-1][fila-1][columna-1]<<endl;
                 val2=matrices[i-1][fila-1+x][columna-1+x]; // X:disminuye
 
                 if(val<=val2)
@@ -94,26 +90,30 @@ int main()
                 {
                     val=val2;
                     verificador=false;
+                    rota=contador;
+                    cout<<"la matriz "<<i<<" de tamano "<<num1<< " roto "<<rota<<" veces"<<endl;
                 }
 
-                if(contador==3)
+                if(contador==4)
                 {
                     matrices[i-1]=crearmatriz(num1-2);
                     x= x-1;
                     tamaño= tamaño-2;
-                    casos(reglas,matrices,i-1,num1-tamaño,fila+x);
 
-                    if(fila+x>num1-2 || columna+x>num1-2 ||num1+tamaño==0)
+                    if(fila+x>num1-2 || columna+x>num1-2 || num1+tamaño==0 || columna+x==0 || fila==0)
                     {
                         verificador2=false;
                     }
                     fila=fila+x;
                     columna=columna+x;
                     num1=num1+tamaño;
+                    contador=0;
+                    if(verificador2==true)
+                    casos(reglas,matrices,i-1,num1-tamaño,fila+x);
                 }
             }
 
-            if(cond==-1 && contador<3)
+            if(cond==-1 && contador<4)
             {
                 val2=matrices[i-1][fila-1+x][columna-1+x]; // X:aumenta
 
@@ -128,14 +128,15 @@ int main()
                 {
                     val=val2;
                     verificador=false;
+                    rota=contador;
+                    cout<<"la matriz "<<i<<" de tamano "<<num1<< " roto "<<rota<<" veces"<<endl;
                 }
 
-                if(contador==3)
+                if(contador==4 && verificador==true)
                 {
                     matrices[i-1]=crearmatriz(num1+2);
                     x= x+1;
                     tamaño= tamaño+2;
-                    casos(reglas,matrices,i-1,num1-tamaño,fila+x);
 
                     if(fila+x>num1+2 || columna+x>num1+2 ||num1+tamaño==0)
                     {
@@ -145,6 +146,8 @@ int main()
                     columna=columna+x;
                     num1=num1+tamaño;
                     contador=0;
+                    if(verificador2==true)
+                    casos(reglas,matrices,i-1,num1-tamaño,fila+x);
                 }
             }
 
@@ -157,11 +160,8 @@ int main()
         }
 
     }
-    if(verificador2==true)
-    {
-        //Acá iria la comentacion de que si cumplio todo
-    }
-
+    delete[] matrices;
+    return 0;
 }
 
 int** crearmatriz(int n)
